@@ -7,7 +7,7 @@ public record UserName(String value) {
 
   private static final int MINIMUM_LENGTH = 3;
   public UserName {
-    Objects.requireNonNull(value, "Username cannot be null");
+    Objects.requireNonNull(value, "UserName cannot be null");
 
     final String normalizedValue = value.trim();
     validateNotEmpty(normalizedValue);
