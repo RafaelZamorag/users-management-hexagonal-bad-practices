@@ -46,7 +46,6 @@ class UserPersistenceMapperTest {
 
   @BeforeEach
   void setUp() {
-    mapper = new UserPersistenceMapper();
     userModel =
         new UserModel(
             new UserId(ID),
