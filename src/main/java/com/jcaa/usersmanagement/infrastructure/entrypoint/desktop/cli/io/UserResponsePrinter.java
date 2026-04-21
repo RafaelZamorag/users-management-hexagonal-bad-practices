@@ -10,6 +10,13 @@ public final class UserResponsePrinter {
 
   private static final String SEPARATOR = "-".repeat(52);
   private static final String ROW_FORMAT = "  %-10s : %s%n";
+  private static final String NO_USERS_FOUND_MESSAGE = "  No users found.";
+  private static final String STATUS_ACTIVE_LABEL = "Activo";
+  private static final String STATUS_INACTIVE_LABEL = "Inactivo";
+  private static final String STATUS_PENDING_LABEL = "Pendiente de activacion";
+  private static final String STATUS_BLOCKED_LABEL = "Bloqueado";
+  private static final String STATUS_DELETED_LABEL = "Eliminado";
+  private static final String STATUS_UNKNOWN_LABEL = "Estado desconocido";
 
   private final ConsoleIO console;
 
@@ -29,7 +36,7 @@ public final class UserResponsePrinter {
     // esta llamada a users.isEmpty() lanza NullPointerException en tiempo de ejecución.
     // Ningún método debe retornar null — se deben usar colecciones vacías.
     if (users.isEmpty()) {
-      console.println("  No users found.");
+      console.println(NO_USERS_FOUND_MESSAGE);
       return;
     }
     console.printf("%n  Total: %d user(s)%n", users.size());
@@ -60,17 +67,17 @@ public final class UserResponsePrinter {
   // o un método getDisplayLabel() en el propio enum UserStatus, eliminaría toda la cascada.
   private static String getStatusLabel(final String status) {
     if ("ACTIVE".equals(status)) {
-      return "Activo";
+      return STATUS_ACTIVE_LABEL;
     } else if ("INACTIVE".equals(status)) {
-      return "Inactivo";
+      return STATUS_INACTIVE_LABEL;
     } else if ("PENDING".equals(status)) {
-      return "Pendiente de activacion";
+      return STATUS_PENDING_LABEL;
     } else if ("BLOCKED".equals(status)) {
-      return "Bloqueado";
+      return STATUS_BLOCKED_LABEL;
     } else if ("DELETED".equals(status)) {
-      return "Eliminado";
+      return STATUS_DELETED_LABEL;
     } else {
-      return "Estado desconocido";
+      return STATUS_UNKNOWN_LABEL;
     }
   }
 }
