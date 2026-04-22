@@ -4,7 +4,7 @@ public final class InvalidCredentialsException extends DomainException {
 
   private static final String INVALID_CREDENTIALS_MESSAGE =
           "Correo o contraseña incorrectos.";
-  private  static final String USER_NO_ACTIVE_MESSAGE =
+  private  static final String USER_NOT_ACTIVE_MESSAGE =
           "Tu cuenta no esta activa. Contacta al administrador.";
 
   private InvalidCredentialsException(final String message) {
@@ -16,6 +16,6 @@ public final class InvalidCredentialsException extends DomainException {
   }
 
   public static InvalidCredentialsException becauseUserIsNotActive() {
-    return new InvalidCredentialsException(USER_NO_ACTIVE_MESSAGE);
+    return new InvalidCredentialsException(USER_NOT_ACTIVE_MESSAGE);
   }
 }

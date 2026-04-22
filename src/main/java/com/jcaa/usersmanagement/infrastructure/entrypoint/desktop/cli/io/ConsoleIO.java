@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public final class ConsoleIO {
 
-  private static final  String REQUIRED_VALUE_MENSSAGE = " Value cannot be black. Please try again.";
-  private static final String INVALID_NUMBER_MENSSAGE = " Invalid input. Please enter a number.";
+  private static final String REQUIRED_VALUE_MESSAGE = " Value cannot be blank. Please try again.";
+  private static final String INVALID_NUMBER_MESSAGE = " Invalid input. Please enter a number.";
 
   private final Scanner scanner;
   private final PrintStream out;
@@ -19,7 +19,7 @@ public final class ConsoleIO {
       out.print(prompt);
       value = scanner.nextLine().trim();
       if (value.isBlank()) {
-        out.println(REQUIRED_VALUE_MENSSAGE);
+        out.println(REQUIRED_VALUE_MESSAGE);
       }
     } while (value.isBlank());
     return value;
@@ -37,7 +37,7 @@ public final class ConsoleIO {
       try {
         return Integer.parseInt(rawInput);
       } catch (final NumberFormatException ignored) {
-        out.println(INVALID_NUMBER_MENSSAGE);
+        out.println(INVALID_NUMBER_MESSAGE);
       }
     }
   }
