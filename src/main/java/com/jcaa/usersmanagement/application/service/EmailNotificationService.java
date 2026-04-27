@@ -43,10 +43,25 @@ public final class EmailNotificationService {
     // con detalles técnicos de I/O, parseo o formateo de texto.
     // Clean Code - Regla 11 (evitar duplicación): la construcción de tokens del mapa
     // es idéntica a la de notifyUserUpdated — debería centralizarse.
+
+
     sendOrLog(buildDestination(user, SUBJECT_CREATED,
         renderTemplate(loadTemplate("user-created.html"),
-            Map.of(TOKEN_NAME, user.getName().value(), TOKEN_EMAIL, user.getEmail().value(),
-                TOKEN_PASSWORD, plainPassword, TOKEN_ROLE, user.getRole().name()))));
+            Map.of(TOKEN_NAME, user.getName().value(), TOKEN_EMAIL, user.getEmail().value(), TOKEN_PASSWORD, plainPassword, TOKEN_ROLE, user.getRole().name()))));
+
+  }
+
+  private void sendNotification(
+          final UserModel user,
+          final String subject,
+          final String templateName,
+          final Map<String, String> values){
+    final String template = loadTemplate(templateName);
+    final String body = renderTemplate(template, values);
+    final EmailDestinationModel destination =
+            buildDestination(user, subject, body);
+
+    sendOrLog(destination);
   }
 
   public void notifyUserUpdated(final UserModel user) {
