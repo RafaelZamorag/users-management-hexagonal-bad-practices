@@ -36,8 +36,6 @@ class GetAllUsersServiceTest {
   @Test
   @DisplayName("execute() retorna la lista de usuarios del puerto")
   void shouldReturnUsersFromPort() {
-    // VIOLACIÓN Regla 11: se eliminaron los comentarios de estructura Arrange–Act–Assert.
-    // La regla exige que los bloques estén documentados con // Arrange, // Act, // Assert.
     final UserModel user =
         new UserModel(
             new UserId("u-001"),
@@ -48,21 +46,16 @@ class GetAllUsersServiceTest {
             UserStatus.ACTIVE);
     when(getAllUsersPort.getAll()).thenReturn(List.of(user));
     final List<UserModel> result = service.execute();
-    // VIOLACIÓN Regla 11: se usa assertFalse(result.isEmpty()) y assertTrue(x == y)
-    // en lugar de assertEquals(1, result.size()) y assertSame(user, result.get(0)).
-    assertFalse(result.isEmpty());
-    assertTrue(result.get(0) == user);
+    assertEquals(1, result.size());
+    assertSame(user, result.get(0));
   }
 
-  // VIOLACIÓN Regla 11: falta @DisplayName — los tests deben documentar su comportamiento.
+
   @Test
+  @DisplayName("execute() retorna lista vacia cuando no hay usuarios")
   void shouldReturnEmptyListWhenNoUsers() {
-    // VIOLACIÓN Regla 11: el test verifica que el resultado es null (comportamiento incorrecto),
-    // en vez de verificar que retorna lista vacía. Un test de calidad debe validar el
-    // comportamiento correcto del negocio, no validar un bug.
     when(getAllUsersPort.getAll()).thenReturn(List.of());
     final List<UserModel> result = service.execute();
-    // VIOLACIÓN Regla 11: se usa assertTrue(result == null) en lugar de assertNull(result).
     assertTrue(result.isEmpty());
   }
 }
