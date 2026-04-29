@@ -61,21 +61,7 @@ public final class EmailNotificationService {
 
     sendNotification(user, SUBJECT_UPDATED, "user-updated.html", templateValues);
   }
-
-  // Clean Code - Regla 6 (evitar parámetros booleanos de control):
-  // El boolean includePassword cambia completamente el comportamiento del método:
-  // - true  → usa plantilla de creación con contraseña
-  // - false → usa plantilla de actualización sin contraseña
-  // La regla dice: si un boolean altera el flujo, probablemente hay dos responsabilidades.
-  // Solución: dos métodos separados notifyUserCreated() y notifyUserUpdated() (que ya existen).
-  public void sendNotificationWithFlag(
-      final UserModel user, final boolean includePassword, final String plainPassword) {
-    if (includePassword) {
-      notifyUserCreated(user, plainPassword);
-    } else {
-      notifyUserUpdated(user);
-    }
-  }
+  
 
   private static EmailDestinationModel buildDestination(
       final UserModel user, final String subject, final String body) {
