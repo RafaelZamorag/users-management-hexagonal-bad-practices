@@ -53,14 +53,13 @@ public final class EmailNotificationService {
   }
 
   public void notifyUserUpdated(final UserModel user) {
-    // Clean Code - Regla 11 (evitar duplicación): misma estructura que notifyUserCreated —
-    // loadTemplate → renderTemplate → buildDestination → sendOrLog.
-    // Esta lógica de orquestación debería extraerse a un método genérico privado.
-    // Clean Code - Regla 25 y 26: misma sobrecompactación que arriba.
-    sendOrLog(buildDestination(user, SUBJECT_UPDATED,
-        renderTemplate(loadTemplate("user-updated.html"),
-            Map.of(TOKEN_NAME, user.getName().value(), TOKEN_EMAIL, user.getEmail().value(),
-                TOKEN_ROLE, user.getRole().name(), TOKEN_STATUS, user.getStatus().name()))));
+    final Map<String, String> templateValues = Map.of(
+            TOKEN_NAME, user.getName().value(),
+            TOKEN_EMAIL, user.getEmail().value(),
+            TOKEN_ROLE, user.getRole().name(),
+            TOKEN_STATUS, user.getStatus().name());
+
+    sendNotification(user, SUBJECT_UPDATED, "user-updated.html", templateValues);
   }
 
   // Clean Code - Regla 6 (evitar parámetros booleanos de control):
