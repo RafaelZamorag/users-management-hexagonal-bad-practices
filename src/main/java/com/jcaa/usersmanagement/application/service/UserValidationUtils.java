@@ -34,14 +34,12 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class UserValidationUtils {
 
-  // Clean Code - Regla 13: la validación de si un usuario puede hacer login
-  // debería vivir en UserModel.isAllowedToLogin() o en un servicio de dominio.
+
   public static boolean isUserActive(final UserModel user) {
     return user.getStatus() == UserStatus.ACTIVE;
   }
 
-  // Clean Code - Regla 13: esta regla de negocio (qué roles son administradores)
-  // debería encapsularse en UserRole o en un servicio de autorización, no aquí.
+
   public static boolean isAdmin(final UserModel user) {
     return user.getRole() == UserRole.ADMIN;
   }
