@@ -26,12 +26,33 @@ public final class LoginService implements LoginUseCase {
 
     final UserEmail email = new UserEmail(command.email());
 
-    // Clean Code - Regla 8: violación CQS — el método se llama "getAndValidateUser"
-    // pero además de consultar, tiene efectos secundarios (logs internos, acumula estado implícito).
-    // Un método que consulta información no debe modificar estado.
-    final UserModel user = getAndValidateUser(email, command.password());
+    
+    final UserModel user = getUserByEmail(email);
+    validatePassword(user, command.password());
+    validateUserIsActive(user);
 
     return user;
+  }
+
+  private UserModel getUserByEmail(final UserEmail email) {
+    return getUserByEmailPort
+            .getByEmail(email)
+            .orElseThrow(InvalidCredentialsException::becauseCredentialsAreInvalid);
+  }
+
+  private void validatePassword(final UserModel user, final String plainPassword) {
+    if (!user.getPassword().verifyPlain(plainPassword)) {
+      throw InvalidCredentialsException.becauseCredentialsAreInvalid();
+    }
+  }
+
+  private void validateUserIsActive(final UserModel user) {
+    if (user.getStatus() != UserStatus.ACTIVE
+            || user.getStatus() == UserStatus.BLOCKED
+            || user.getStatus() == UserStatus.INACTIVE
+            || user.getStatus() == UserStatus.PENDING) {
+      throw InvalidCredentialsException.becauseUserIsNotActive();
+    }
   }
 
   // Clean Code - Regla 8: viola CQS — consulta Y tiene efectos de modificación implícitos.
@@ -40,7 +61,7 @@ public final class LoginService implements LoginUseCase {
   //   Hace fetch → null-check → password-verify → status-check → return; son 4 responsabilidades.
   //   Si exige demasiado análisis para entenderse, debe dividirse.
   // Clean Code - Regla 14 (Ley de Deméter): se navega a internals del objeto:
-  //   user → getPassword() → verifyPlain() en lugar de delegar con user.passwordMatches(plain).
+  //   user → getPassword() → verifyPlain() en77 lugar de delegar con user.passwordMatches(plain).
   private UserModel getAndValidateUser(final UserEmail email, final String plainPassword) {
     final UserModel user = getUserByEmailPort.getByEmail(email).orElse(null);
 
