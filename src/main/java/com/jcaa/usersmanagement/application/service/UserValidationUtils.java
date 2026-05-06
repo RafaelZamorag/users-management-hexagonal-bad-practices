@@ -3,6 +3,7 @@ package com.jcaa.usersmanagement.application.service;
 import com.jcaa.usersmanagement.domain.model.UserModel;
 import com.jcaa.usersmanagement.domain.enums.UserStatus;
 import com.jcaa.usersmanagement.domain.enums.UserRole;
+import lombok.experimental.UtilityClass;
 
 /**
  * Clean Code - Regla 13 (evitar clases utilitarias innecesarias):
@@ -30,6 +31,7 @@ import com.jcaa.usersmanagement.domain.enums.UserRole;
  * Sus métodos no trabajan sobre un mismo concepto o responsabilidad — son un
  * "contenedor de cosas relacionadas vagamente". Eso es exactamente baja cohesión.
  */
+@UtilityClass
 public class UserValidationUtils {
 
   // Clean Code - Regla 13: la validación de si un usuario puede hacer login
