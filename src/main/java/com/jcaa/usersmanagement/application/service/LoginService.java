@@ -26,12 +26,28 @@ public final class LoginService implements LoginUseCase {
 
     final UserEmail email = new UserEmail(command.email());
 
-    // Clean Code - Regla 8: violación CQS — el método se llama "getAndValidateUser"
-    // pero además de consultar, tiene efectos secundarios (logs internos, acumula estado implícito).
-    // Un método que consulta información no debe modificar estado.
-    final UserModel user = getAndValidateUser(email, command.password());
+
+    final UserModel user = findUserByEmail(email);
+    validateLogin(user, command.password());
 
     return user;
+  }
+  private UserModel findUserByEmail(final UserEmail email) {
+    return getUserByEmailPort.getByEmail(email)
+            .orElseThrow(InvalidCredentialsException::becauseCredentialsAreInvalid);
+  }
+
+  private void validateLogin(final UserModel user, final String plainPassword) {
+    if (!user.getPassword().verifyPlain(plainPassword)) {
+      throw InvalidCredentialsException.becauseCredentialsAreInvalid();
+    }
+
+    if (user.getStatus() != UserStatus.ACTIVE
+            || user.getStatus() == UserStatus.BLOCKED
+            || user.getStatus() == UserStatus.INACTIVE
+            || user.getStatus() == UserStatus.PENDING) {
+      throw InvalidCredentialsException.becauseUserIsNotActive();
+    }
   }
 
   // Clean Code - Regla 8: viola CQS — consulta Y tiene efectos de modificación implícitos.
