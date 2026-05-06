@@ -16,6 +16,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import java.util.Optional;
 
 import java.util.Set;
 
@@ -70,9 +71,6 @@ public final class UpdateUserService implements UpdateUserUseCase {
   }
 
   private void ensureEmailIsNotTakenByAnotherUser(final UserEmail newEmail, final UserId ownerId) {
-    // Clean Code - Regla 17: condición booleana excesivamente larga y difícil de leer.
-    // La regla dice: extraer condiciones complejas a métodos con nombre significativo.
-    // Esta expresión llama al repositorio TRES VECES en la misma condición — ineficiente e ilegible.
     // Clean Code - Regla 25 (preferir claridad sobre ingenio):
     // El autor intentó ser exhaustivo en una sola expresión booleana, pero el resultado
     // es incomprensible. Un lector no puede deducir la intención en pocos segundos.
@@ -82,12 +80,16 @@ public final class UpdateUserService implements UpdateUserUseCase {
     // Clean Code - Regla 27 (código listo para leer, no solo para ejecutar):
     // Sin explicación oral del autor es imposible determinar qué condición exacta
     // se está evaluando ni por qué hay lógica redundante en la segunda mitad del OR.
-    if (getUserByEmailPort.getByEmail(newEmail).isPresent()
-        && !getUserByEmailPort.getByEmail(newEmail).get().getId().equals(ownerId)
-        && !getUserByEmailPort.getByEmail(newEmail).get().getEmail().value().equals(newEmail.value())
-            || (getUserByEmailPort.getByEmail(newEmail).isPresent()
-                && !getUserByEmailPort.getByEmail(newEmail).get().getId().value().equals(ownerId.value()))) {
+    final Optional<UserModel> existingUser = getUserByEmailPort.getByEmail(newEmail);
+
+    if (belongsToAnotherUser(existingUser, ownerId)) {
       throw UserAlreadyExistsException.becauseEmailAlreadyExists(newEmail.value());
     }
+  }
+
+  private boolean belongsToAnotherUser(final Optional<UserModel> existingUser, final UserId ownerId) {
+    return existingUser
+            .map(user -> !user.getId().equals(ownerId))
+            .orElse(false);
   }
 }
