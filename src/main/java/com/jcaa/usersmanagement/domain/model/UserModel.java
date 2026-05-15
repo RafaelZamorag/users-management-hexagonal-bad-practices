@@ -43,4 +43,12 @@ public class UserModel {
     return new UserModel(id, name, email, password, role, UserStatus.INACTIVE);
   }
 
+  public boolean isActive() {
+    return this.status == UserStatus.ACTIVE;
+  }
+
+  public boolean isAdmin() {
+    return this.role == UserRole.ADMIN;
+  }
+
 }

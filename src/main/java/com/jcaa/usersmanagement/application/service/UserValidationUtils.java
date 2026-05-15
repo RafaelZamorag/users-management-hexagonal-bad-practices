@@ -3,6 +3,7 @@ package com.jcaa.usersmanagement.application.service;
 import com.jcaa.usersmanagement.domain.model.UserModel;
 import com.jcaa.usersmanagement.domain.enums.UserStatus;
 import com.jcaa.usersmanagement.domain.enums.UserRole;
+import com.jcaa.usersmanagement.domain.valueobject.UserEmail;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -35,32 +36,7 @@ import lombok.experimental.UtilityClass;
 public class UserValidationUtils {
 
 
-  public static boolean isUserActive(final UserModel user) {
-    return user.getStatus() == UserStatus.ACTIVE;
-  }
 
-
-  public static boolean isAdmin(final UserModel user) {
-    return user.getRole() == UserRole.ADMIN;
-  }
-
-  // Clean Code - Regla 11 (evitar duplicación): esta validación de email ya existe
-  // en UserEmail y en UserEmail.isValidFormat() — se duplica lógica de dominio.
-  // Clean Code - Regla 23: el conocimiento de qué es un email válido está disperso
-  // entre UserEmail, UserValidationUtils y potencialmente otras clases.
-  public static boolean isValidEmail(final String email) {
-    if (email == null || email.isBlank()) {
-      return false;
-    }
-    return email.contains("@") && email.contains(".");
-  }
-
-  // Clean Code - Regla 13: validación que pertenece al value object UserPassword.
-  // Clean Code - Regla 18 (magic numbers): el número 8 es un magic number aquí —
-  // ya tiene significado en UserPassword pero se repite sin constante.
-  public static boolean isValidPassword(final String password) {
-    return password != null && password.length() >= 8;
-  }
 
   // Clean Code - Regla 20 (objeto antes que primitivo cuando el concepto lo merezca):
   // Este método recibe userId, email y status como String y int desnudos en lugar de
